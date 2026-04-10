@@ -7,6 +7,33 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false)
   const [backToTopVisible, setBackToTopVisible] = useState(false)
 
+  const [lightbox, setLightbox] = useState({ open: false, index: 0 })
+
+  const galleryImages = [
+    { src: '/campus-2.jpeg', label: 'Main University Building' },
+    { src: '/campus-3.jpeg', label: 'Campus Grounds' },
+    { src: '/campus-4.jpeg', label: 'University Gate' },
+    { src: '/campus-5.jpeg', label: 'Medical College & Hospital' },
+    { src: '/campus-1.jpeg', label: 'University Front View' },
+  ]
+
+  const openLightbox = (index) => setLightbox({ open: true, index })
+  const closeLightbox = () => setLightbox({ open: false, index: 0 })
+  const prevImage = () => setLightbox(prev => ({ open: true, index: (prev.index - 1 + galleryImages.length) % galleryImages.length }))
+  const nextImage = () => setLightbox(prev => ({ open: true, index: (prev.index + 1) % galleryImages.length }))
+
+  // Close lightbox on Escape key
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (!lightbox.open) return
+      if (e.key === 'Escape') closeLightbox()
+      if (e.key === 'ArrowLeft') prevImage()
+      if (e.key === 'ArrowRight') nextImage()
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [lightbox.open])
+
   const slides = [
     { src: '/campus-2.jpeg', alt: 'MGM Medical College Campus' },
     { src: '/campus-1.jpeg', alt: 'MGM Campus Gate' },
@@ -303,14 +330,8 @@ export default function Home() {
             <h2 className="section-title">Our Campus &amp; Facilities</h2>
           </div>
           <div className="gallery-grid">
-            {[
-              { src: '/campus-2.jpeg', label: 'Main University Building' },
-              { src: '/campus-3.jpeg', label: 'Campus Grounds' },
-              { src: '/campus-4.jpeg', label: 'University Gate' },
-              { src: '/campus-5.jpeg', label: 'Medical College & Hospital' },
-              { src: '/campus-1.jpeg', label: 'University Front View' },
-            ].map((img, i) => (
-              <div key={i} className="gallery-item reveal">
+            {galleryImages.map((img, i) => (
+              <div key={i} className="gallery-item reveal" onClick={() => openLightbox(i)}>
                 <img src={img.src} alt={img.label} loading="lazy" />
                 <div className="gallery-item-overlay"><span>{img.label}</span></div>
               </div>
@@ -469,6 +490,19 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Lightbox */}
+      <div className={`lightbox ${lightbox.open ? 'open' : ''}`} onClick={closeLightbox}>
+        <button className="lightbox-close" onClick={closeLightbox}>✕</button>
+        <button className="lightbox-nav lightbox-prev" onClick={(e) => { e.stopPropagation(); prevImage(); }}>‹</button>
+        <img
+          src={galleryImages[lightbox.index]?.src}
+          alt={galleryImages[lightbox.index]?.label}
+          onClick={(e) => e.stopPropagation()}
+        />
+        <button className="lightbox-nav lightbox-next" onClick={(e) => { e.stopPropagation(); nextImage(); }}>›</button>
+        <div className="lightbox-caption">{galleryImages[lightbox.index]?.label}</div>
+      </div>
 
       {/* Back to Top */}
       <button className={`back-to-top ${backToTopVisible ? 'visible' : ''}`} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Back to top">↑</button>
