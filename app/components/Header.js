@@ -32,9 +32,9 @@ export default function Header() {
             <a href="#about" onClick={(e) => handleNavClick(e, '#about')}>About</a>
             <div className="nav-dropdown-menu">
               <a href="/about">About MGM</a>
-              <a href="#">Principal / Dean</a>
-              <a href="#">Vice Principal</a>
-              <a href="#">Medical Superintendent</a>
+              <a href="/principal-dean">Principal / Dean</a>
+              <a href="/vice-principal">Vice Principal</a>
+              <a href="/medical-superintendent">Medical Superintendent</a>
               <a href="#">Affiliations &amp; Accreditation</a>
               <a href="#">Affiliating University Info</a>
             </div>
