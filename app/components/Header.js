@@ -26,6 +26,7 @@ export default function Header() {
             <div className="sub">&amp; Lions Seva Kendra Hospital, Kishanganj</div>
           </div>
         </a>
+
         <ul className={`nav-links ${navOpen ? 'open' : ''}`}>
           <li className="nav-dropdown">
             <a href="#about" onClick={(e) => handleNavClick(e, '#about')}>About</a>
@@ -49,9 +50,6 @@ export default function Header() {
           </li>
           <li><a href="#departments" onClick={(e) => handleNavClick(e, '#departments')}>Departments</a></li>
           <li><a href="#">Admissions</a></li>
-          <li><a href="#">Info MCI</a></li>
-          <li><a href="#notices" onClick={(e) => handleNavClick(e, '#notices')}>Notices</a></li>
-          <li><a href="#">CMEs / Events</a></li>
           <li className="nav-dropdown">
             <a href="#">Committees</a>
             <div className="nav-dropdown-menu">
@@ -65,6 +63,7 @@ export default function Header() {
           </li>
           <li><a href="#" className="nav-cta">Apply Now</a></li>
         </ul>
+
         <button className="mobile-toggle" onClick={() => setNavOpen(!navOpen)} aria-label="Toggle menu">
           <span></span><span></span><span></span>
         </button>
