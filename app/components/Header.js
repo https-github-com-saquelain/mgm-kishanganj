@@ -27,13 +27,42 @@ export default function Header() {
           </div>
         </a>
         <ul className={`nav-links ${navOpen ? 'open' : ''}`}>
-          <li><a href="#about" onClick={(e) => handleNavClick(e, '#about')}>About</a></li>
+          <li className="nav-dropdown">
+            <a href="#about" onClick={(e) => handleNavClick(e, '#about')}>About</a>
+            <div className="nav-dropdown-menu">
+              <a href="#about" onClick={(e) => handleNavClick(e, '#about')}>About MGM</a>
+              <a href="#">Principal / Dean</a>
+              <a href="#">Vice Principal</a>
+              <a href="#">Medical Superintendent</a>
+              <a href="#">Affiliations &amp; Accreditation</a>
+              <a href="#">Affiliating University Info</a>
+            </div>
+          </li>
+          <li className="nav-dropdown">
+            <a href="#">Academics</a>
+            <div className="nav-dropdown-menu">
+              <a href="#">Syllabus UG (Undergraduate)</a>
+              <a href="#">Syllabus PG (Postgraduate)</a>
+              <a href="#">AETCOM Module</a>
+              <a href="#">Academic Calendar</a>
+            </div>
+          </li>
           <li><a href="#departments" onClick={(e) => handleNavClick(e, '#departments')}>Departments</a></li>
-          <li><a href="#hospital" onClick={(e) => handleNavClick(e, '#hospital')}>Hospital</a></li>
+          <li><a href="#">Admissions</a></li>
+          <li><a href="#">Info MCI</a></li>
           <li><a href="#notices" onClick={(e) => handleNavClick(e, '#notices')}>Notices</a></li>
-          <li><a href="#results" onClick={(e) => handleNavClick(e, '#results')}>Results</a></li>
-          <li><a href="#gallery" onClick={(e) => handleNavClick(e, '#gallery')}>Gallery</a></li>
-          <li><a href="#contact" onClick={(e) => handleNavClick(e, '#contact')}>Contact</a></li>
+          <li><a href="#">CMEs / Events</a></li>
+          <li className="nav-dropdown">
+            <a href="#">Committees</a>
+            <div className="nav-dropdown-menu">
+              <a href="#">MEU</a>
+              <a href="#">CC</a>
+              <a href="#">Anti Ragging</a>
+              <a href="#">Gender Harassment (POSH)</a>
+              <a href="#">HIC</a>
+              <a href="#">IEC</a>
+            </div>
+          </li>
           <li><a href="#" className="nav-cta">Apply Now</a></li>
         </ul>
         <button className="mobile-toggle" onClick={() => setNavOpen(!navOpen)} aria-label="Toggle menu">
