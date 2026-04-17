@@ -30,7 +30,7 @@ export default function Header() {
           <li className="nav-dropdown">
             <a href="#about" onClick={(e) => handleNavClick(e, '#about')}>About</a>
             <div className="nav-dropdown-menu">
-              <a href="#about" onClick={(e) => handleNavClick(e, '#about')}>About MGM</a>
+              <a href="/about">About MGM</a>
               <a href="#">Principal / Dean</a>
               <a href="#">Vice Principal</a>
               <a href="#">Medical Superintendent</a>
