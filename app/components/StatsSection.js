@@ -7,7 +7,7 @@ export default function StatsSection() {
           <div className="stat-label">Year Established</div>
         </div>
         <div className="stat-item">
-          <div className="stat-number">100<span className="plus">+</span></div>
+          <div className="stat-number">150<span className="plus">+</span></div>
           <div className="stat-label">MBBS Seats</div>
         </div>
         <div className="stat-item">
