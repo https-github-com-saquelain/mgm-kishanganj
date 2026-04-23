@@ -8,8 +8,13 @@ export default function Footer() {
         <div className="footer-grid">
           <div>
             <div className="footer-brand">
-              <img src="/mgm-logo.png" alt="MGM Logo" />
+              <img src="/mgm-logo.png" alt="MGM Medical College Logo" />
               <div className="footer-brand-text">Mata Gujri Memorial<br />Medical College</div>
+              <div className="footer-logo-divider" />
+              <div className="footer-logo-item">
+                <img src="/mgu-logo.png" alt="Mata Gujri University Logo" />
+                <span>University</span>
+              </div>
             </div>
             <p>Established by the Sikh minority community to serve the healthcare needs of the North-East Region, Kishanganj, Bihar since 1990.</p>
           </div>
