@@ -53,16 +53,16 @@ export default function Header() {
           <li><a href="#departments" onClick={(e) => handleNavClick(e, '#departments')}>Departments</a></li>
           <li><a href="#">Admissions</a></li>
           <li className="nav-dropdown">
-            <a href="#">Committees</a>
+            <a href="/committees">Committees</a>
             <div className="nav-dropdown-menu">
-              <a href="#">MEU</a>
-              <a href="#">CC</a>
-              <a href="#">Anti Ragging</a>
-              <a href="#">Gender Harassment (POSH)</a>
-              <a href="#">HIC</a>
-              <a href="#">IEC</a>
+                <a href="/committees#meu">MEU (Medical Education Unit)</a>
+                <a href="/committees#curriculum-committee">Curriculum Committee</a>
+                <a href="/committees#anti-ragging">Anti-Ragging</a>
+                <a href="/committees#icc">Gender Harassment (POSH / ICC)</a>
+                <a href="/committees#pharmacovigilance">Pharmacovigilance</a>
+                <a href="/committees">View All Committees →</a>
             </div>
-          </li>
+            </li>
           <li><a href="#" className="nav-cta">Apply Now</a></li>
         </ul>
 
