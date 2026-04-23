@@ -1,4 +1,10 @@
 import './globals.css'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import AnnouncementBar from './components/AnnouncementBar'
+import TopBar from './components/TopBar'
+import BackToTop from './components/BackToTop'
+import ScrollReveal from './components/ScrollReveal'
 
 export const metadata = {
   title: 'Mata Gujri Memorial Medical College & LSK Hospital, Kishanganj',
@@ -13,7 +19,15 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
       </head>
-      <body>{children}</body>
+      <body>
+        <ScrollReveal />
+        <AnnouncementBar />
+        <TopBar />
+        <Header />
+        {children}
+        <Footer />
+        <BackToTop />
+      </body>
     </html>
   )
 }

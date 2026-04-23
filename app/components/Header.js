@@ -46,6 +46,8 @@ export default function Header() {
               <a href="#">Syllabus PG (Postgraduate)</a>
               <a href="#">AETCOM Module</a>
               <a href="#">Academic Calendar</a>
+              <a href="/faculty">Teaching Faculty</a>
+              <a href="/faculty?tab=non-teaching">Non-Teaching Staff</a>
             </div>
           </li>
           <li><a href="#departments" onClick={(e) => handleNavClick(e, '#departments')}>Departments</a></li>
