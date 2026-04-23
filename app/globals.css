@@ -2203,6 +2203,408 @@ body {
   flex-shrink: 0;
 }
 
+/* ========== STUDENTS PAGE ========== */
+.students-page {
+  background: var(--gray-100);
+}
+
+/* Intro strip — reuses spacing from committees page */
+.students-intro-strip {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+}
+.students-intro-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 40px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: center;
+}
+.students-intro-inner p {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--gray-700);
+  max-width: 680px;
+}
+.students-intro-stats {
+  display: flex;
+  gap: 36px;
+  align-items: center;
+}
+.students-intro-stats > div { text-align: center; }
+.students-intro-stats strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--blue-primary);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.students-intro-stats span {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+}
+
+/* Tabs bar — bigger, more descriptive than the faculty tabs */
+.students-tabs-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  position: sticky;
+  top: 80px; /* matches header height */
+  z-index: 50;
+  box-shadow: 0 2px 12px rgba(10, 22, 40, 0.04);
+}
+.students-tabs-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 18px 40px;
+}
+.students-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--gray-100);
+  border-radius: 10px;
+  padding: 5px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.students-tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 12px 24px;
+  cursor: pointer;
+  border-radius: 7px;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: var(--gray-700);
+}
+.students-tab:hover { color: var(--navy); }
+.students-tab.active {
+  background: var(--navy);
+  color: var(--white);
+  box-shadow: 0 3px 10px rgba(10, 22, 40, 0.2);
+}
+.students-tab-main {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.students-tab-sub {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.7;
+  letter-spacing: 0.04em;
+}
+.students-tab.active .students-tab-sub {
+  color: var(--gold-light);
+  opacity: 1;
+}
+
+/* Content */
+.students-content {
+  padding: 50px 40px 80px;
+}
+.students-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.students-section {
+  margin-bottom: 56px;
+}
+.students-section:last-child { margin-bottom: 0; }
+
+.students-section-head {
+  margin-bottom: 22px;
+}
+.students-section-head h2 {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.2vw, 28px);
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/* Archive head needs toggle button on the right */
+.students-archive-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.students-archive-toggle {
+  background: var(--white);
+  border: 1.5px solid var(--gray-300);
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+.students-archive-toggle:hover {
+  border-color: var(--blue-primary);
+  color: var(--blue-primary);
+  background: var(--gray-100);
+}
+.students-archive-toggle svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.25s ease;
+}
+
+/* Archive collapsible */
+.students-archive {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.25s ease, margin-top 0.25s;
+}
+.students-archive.open {
+  max-height: 3000px;
+  opacity: 1;
+  margin-top: 4px;
+}
+
+/* PDF cards — shared base */
+.student-pdf-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s;
+  cursor: pointer;
+}
+.student-pdf-card:hover {
+  box-shadow: 0 8px 24px rgba(10, 22, 40, 0.08);
+  border-color: var(--blue-primary);
+  transform: translateY(-2px);
+}
+.student-pdf-card:hover .student-pdf-icon {
+  background: var(--blue-primary);
+  color: var(--white);
+}
+.student-pdf-card:hover .student-pdf-open {
+  color: var(--blue-primary);
+}
+.student-pdf-card:hover .student-pdf-open svg {
+  transform: translate(2px, -2px);
+}
+
+.student-pdf-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: rgba(230, 80, 80, 0.1);
+  color: #c44545;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s;
+}
+.student-pdf-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.student-pdf-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.student-pdf-session {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue-accent);
+}
+.student-pdf-label {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.35;
+}
+.student-pdf-level {
+  font-size: 12.5px;
+  color: var(--gray-500);
+  font-weight: 500;
+}
+
+.student-pdf-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.student-pdf-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-500);
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+.student-pdf-open svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s;
+}
+
+/* Featured card — hero treatment for latest */
+.student-pdf-card-featured {
+  background: linear-gradient(135deg, var(--white) 0%, var(--cream) 100%);
+  border: 2px solid var(--gold);
+  padding: 28px;
+  position: relative;
+}
+.student-pdf-card-featured::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+  border-radius: 8px 8px 0 0;
+}
+.student-pdf-card-featured .student-pdf-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--navy);
+  color: var(--gold-light);
+}
+.student-pdf-card-featured .student-pdf-icon svg {
+  width: 28px;
+  height: 28px;
+}
+.student-pdf-card-featured:hover .student-pdf-icon {
+  background: var(--gold);
+  color: var(--navy);
+}
+.student-pdf-card-featured .student-pdf-label {
+  font-size: 20px;
+}
+.student-pdf-card-featured .student-pdf-session {
+  color: var(--gold);
+}
+
+/* Grid for recent + archive */
+.students-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+
+/* Compact variant used inside archive */
+.student-pdf-card-compact {
+  padding: 16px 18px;
+  gap: 14px;
+}
+.student-pdf-card-compact .student-pdf-icon {
+  width: 40px;
+  height: 40px;
+}
+.student-pdf-card-compact .student-pdf-icon svg {
+  width: 18px;
+  height: 18px;
+}
+.student-pdf-card-compact .student-pdf-label {
+  font-size: 14.5px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .students-intro-inner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    text-align: left;
+  }
+  .students-intro-stats {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 1100px) {
+  .students-tabs-bar { top: 70px; }
+  .students-tabs-inner { padding: 14px 24px; }
+  .students-content { padding: 40px 24px 60px; }
+}
+
+@media (max-width: 768px) {
+  .students-intro-inner { padding: 24px 20px; }
+  .students-intro-stats { gap: 24px; }
+  .students-intro-stats strong { font-size: 26px; }
+  .students-tabs-inner { padding: 12px 16px; }
+  .students-tab-main { font-size: 13px; }
+  .students-tab-sub { font-size: 10px; }
+  .students-tab { padding: 10px 12px; }
+  .students-content { padding: 32px 16px 60px; }
+
+  .student-pdf-card {
+    padding: 16px;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .student-pdf-card-featured { padding: 22px; }
+  .student-pdf-card-featured .student-pdf-icon {
+    width: 52px;
+    height: 52px;
+  }
+  .student-pdf-card-featured .student-pdf-label {
+    font-size: 17px;
+  }
+  .student-pdf-card-featured .student-pdf-actions {
+    width: 100%;
+    justify-content: space-between;
+    padding-top: 8px;
+    border-top: 1px solid var(--gray-200);
+    margin-top: 4px;
+  }
+
+  .students-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .students-archive-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .students-archive-toggle {
+    justify-content: center;
+  }
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .committees-intro-inner {

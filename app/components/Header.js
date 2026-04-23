@@ -46,6 +46,7 @@ export default function Header() {
               <a href="#">Syllabus PG (Postgraduate)</a>
               <a href="#">AETCOM Module</a>
               <a href="#">Academic Calendar</a>
+              <a href="/students">Students</a>
               <a href="/faculty">Teaching Faculty</a>
               <a href="/faculty?tab=non-teaching">Non-Teaching Staff</a>
             </div>
