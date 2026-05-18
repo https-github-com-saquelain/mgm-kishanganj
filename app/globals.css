@@ -1486,6 +1486,43 @@ body {
   line-height: 1.4;
 }
 
+/* Contact links inside principal card */
+.principal-card-contacts {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.principal-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: color 0.2s;
+  word-break: break-all;
+}
+
+.principal-contact-item svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.principal-contact-item:hover {
+  color: var(--gold-light);
+}
+
+.principal-contact-item:hover svg {
+  opacity: 1;
+}
+
 /* Message column */
 .principal-message .section-label { margin-bottom: 12px; }
 .principal-message .section-title { margin-bottom: 28px; }
