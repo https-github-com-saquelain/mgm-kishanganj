@@ -36,7 +36,7 @@ export default function Header() {
               <a href="/vice-principal">Vice Principal</a>
               <a href="/medical-superintendent">Medical Superintendent</a>
               <a href="#">Affiliations &amp; Accreditation</a>
-              <a href="#">Affiliating University Info</a>
+              <a href="https://www.mgmmckishanganj.in/">Affiliating University Info</a>
             </div>
           </li>
           <li className="nav-dropdown">
