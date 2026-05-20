@@ -9,6 +9,7 @@ import GallerySection from './components/GallerySection'
 import HospitalSection from './components/HospitalSection'
 import DownloadsSection from './components/DownloadsSection'
 import ContactSection from './components/ContactSection'
+import AlumniSection from './components/AlumniSection'
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
       <NoticesSection />
       <GallerySection />
       <HospitalSection />
+      <AlumniSection />
       <DownloadsSection />
       <ContactSection />
     </>
