@@ -85,7 +85,13 @@ export default function Header() {
           </li>
 
           {/* Admissions */}
-          <li><a href="#">Admissions</a></li>
+          <li className="nav-dropdown">
+            <Link href="/admissions">Admissions</Link>
+            <div className="nav-dropdown-menu">
+              <Link href="/admissions?tab=ug" onClick={closeNav}>UG Admission</Link>
+              <Link href="/admissions?tab=pg" onClick={closeNav}>PG Admission</Link>
+            </div>
+          </li>
 
           {/* Committees */}
           <li className="nav-dropdown">
