@@ -22,7 +22,7 @@ export default function PrincipalDeanPage() {
         <div className="page-hero-content">
           <div className="section-label" style={{ color: 'var(--gold-light)' }}>Leadership</div>
           <h1>Principal / Dean&apos;s Message</h1>
-          <p>&ldquo;Service to Man is Service to God&rdquo;</p>
+          {/* <p>&ldquo;Service to Man is Service to God&rdquo;</p> */}
         </div>
       </div>
 
