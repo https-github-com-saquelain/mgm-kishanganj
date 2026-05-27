@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { departments } from '../data/departments'
 
 export default function DepartmentsSection() {
@@ -14,11 +13,11 @@ export default function DepartmentsSection() {
         </div>
         <div className="departments-grid">
           {departments.map((dept) => (
-            <Link key={dept.slug} href={`/departments/${dept.slug}`} className="dept-card reveal">
+            <a key={dept.slug} href={`/departments/${dept.slug}`} className="dept-card reveal">
               <h3>{dept.name}</h3>
               <p>{dept.shortDesc}</p>
               <span className="dept-arrow">Learn more →</span>
-            </Link>
+            </a>
           ))}
         </div>
       </div>
