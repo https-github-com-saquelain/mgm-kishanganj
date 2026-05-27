@@ -5,7 +5,7 @@ export default function TopBar() {
       <div className="top-bar-links">
         <a href="#">Notices</a>
         <a href="#">Results</a>
-        <a href="#">Info MCI</a>
+        <a href="https://www.mgmmckishanganj.in/wp-content/uploads/2023/12/Pro-forma-18-1.pdf" target="_blank" rel="noopener noreferrer">Info NMC</a>
         <a href="#">CMEs &amp; Events</a>
         <a href="#">Alumni</a>
       </div>
