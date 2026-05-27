@@ -42,7 +42,7 @@ export default function Header() {
           <li className="nav-dropdown">
             <a href="#">Academics</a>
             <div className="nav-dropdown-menu">
-              <a href="#">Syllabus UG (Undergraduate)</a>
+              <a href="/syllabus-ug">Syllabus UG (Undergraduate)</a>
               <a href="https://www.nmc.org.in/information-desk/for-colleges/pg-curricula-2/">Syllabus PG (Postgraduate)</a>
               <a href="#">AETCOM Module</a>
               <a href="#">Academic Calendar</a>
