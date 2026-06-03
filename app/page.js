@@ -18,12 +18,12 @@ export default function Home() {
       <QuickLinks />
       <StatsSection />
       <AboutSection />
+      <AlumniSection />
       <DepartmentsSection />
       <VideoSection />
       <NoticesSection />
       <GallerySection />
       <HospitalSection />
-      <AlumniSection />
       <DownloadsSection />
       <ContactSection />
     </>

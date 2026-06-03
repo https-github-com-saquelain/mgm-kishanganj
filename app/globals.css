@@ -2608,7 +2608,8 @@ body {
 /* ========== ALUMNI / TESTIMONIALS ========== */
 .alumni-section {
   padding: 100px 40px;
-  background: var(--white);
+  /* background: var(--white); */
+  background: var(--gray-100);
   border-top: 1px solid var(--gray-200);
 }
 .alumni-inner { max-width: 1200px; margin: 0 auto; }

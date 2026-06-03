@@ -50,7 +50,7 @@ export default function VicePrincipalPage() {
               </div>
               <div className="principal-card">
                 <div className="principal-card-name">Prof. (Dr.) Asitava Deb Roy</div>
-                <div className="principal-card-qual">MD (Patho), ACME, MHPE, PGDHHM, PhD (Scholar)</div>
+                <div className="principal-card-qual">MD (Patho), ACME, MHPE, PGDHHM</div>
                 <div className="principal-card-role">Vice Principal</div>
                 <div className="principal-card-inst">Mata Gujri Memorial Medical College</div>
                 <div className="principal-card-contacts">
@@ -94,7 +94,7 @@ export default function VicePrincipalPage() {
               <div className="principal-signature">
                 <div className="principal-sig-rule"></div>
                 <div className="principal-sig-name">Prof. (Dr.) Asitava Deb Roy</div>
-                <div className="principal-sig-qual">MD (Patho), ACME, MHPE, PGDHHM, PhD (Scholar)</div>
+                <div className="principal-sig-qual">MD (Patho), ACME, MHPE, PGDHHM</div>
                 <div className="principal-sig-role">Vice Principal</div>
               </div>
             </div>
