@@ -8,7 +8,7 @@ export default function TopBar() {
         <Link href="/class-notices">Notices</Link>
         <Link href="/results">Results</Link>
         <a href="https://www.mgmmckishanganj.in/wp-content/uploads/2023/12/Pro-forma-18-1.pdf" target="_blank" rel="noopener noreferrer">Info NMC</a>
-        <a href="#">CMEs &amp; Events</a>
+        <Link href="/cmes-events">CMEs &amp; Events</Link>
         <a href="#">Alumni</a>
       </div>
     </div>
