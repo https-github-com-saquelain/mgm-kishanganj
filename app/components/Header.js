@@ -55,7 +55,7 @@ export default function Header() {
               <a href="https://www.nmc.org.in/information-desk/for-colleges/pg-curricula-2/" target="_blank" rel="noopener noreferrer">Syllabus PG (Postgraduate)</a>
               <Link href="/aetcom-module" onClick={closeNav}>AETCOM Module</Link>
               <a href="#">Academic Calendar</a>
-              <a href="#">Courses</a>
+              <Link href="/courses" onClick={closeNav}>Courses</Link>
               <Link href="/students" onClick={closeNav}>List of Students</Link>
               <Link href="/faculty" onClick={closeNav}>Teaching Faculty</Link>
               <Link href="/faculty?tab=non-teaching" onClick={closeNav}>Non-Teaching Staff</Link>
