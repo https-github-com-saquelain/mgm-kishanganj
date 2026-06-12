@@ -4128,12 +4128,12 @@ a.dept-card {
   box-shadow: 0 3px 10px rgba(10, 22, 40, 0.2);
 }
 .courses-tab-main {
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.01em;
 }
 .courses-tab-sub {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 500;
   opacity: 0.7;
   letter-spacing: 0.04em;
