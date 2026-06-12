@@ -136,7 +136,45 @@ export default function CommitteesPage() {
               To report ragging, harassment, or any grievance, contact the relevant committee
               directly or reach the Principal&apos;s office.
             </p>
+
+            {/* Toll-free number */}
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '12px',
+              marginTop: '20px',
+              padding: '12px 24px',
+              background: 'rgba(200,149,46,0.15)',
+              border: '1px solid rgba(200,149,46,0.35)',
+              borderRadius: '6px',
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="var(--gold-light)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07
+                  A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.06 1.18 2 2 0 012
+                  .04h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0
+                  01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0
+                  012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+              </svg>
+              <div>
+                <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '0.1em',
+                  textTransform: 'uppercase', color: 'var(--gold-light)', marginBottom: '4px' }}>
+                  24×7 Toll Free Helpline
+                </div>
+                <a href="tel:18003456189" style={{
+                  fontSize: '20px',
+                  fontWeight: '700',
+                  color: 'var(--white)',
+                  textDecoration: 'none',
+                  letterSpacing: '0.02em',
+                  fontFamily: 'var(--font-body)',
+                }}>
+                  18003456189
+                </a>
+              </div>
+            </div>
           </div>
+
           <a href="#contact" className="btn-hero btn-hero-primary">Contact the College</a>
         </div>
       </section>

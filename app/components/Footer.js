@@ -52,7 +52,62 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        <div className="footer-bottom">
+
+        {/* ── Anti-Ragging Helpline Strip ── */}
+        <div style={{
+          margin: '32px 0 0',
+          padding: '20px 24px',
+          background: 'rgba(200,149,46,0.08)',
+          border: '1px solid rgba(200,149,46,0.2)',
+          borderRadius: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '16px',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{
+              width: '40px', height: '40px', borderRadius: '50%',
+              background: 'rgba(200,149,46,0.15)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="var(--gold-light)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.06 1.18 2 2 0 012 .04h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+              </svg>
+            </div>
+            <div>
+              <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '0.1em',
+                textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '3px' }}>
+                Anti-Ragging Helpline — 24×7 Toll Free
+              </div>
+              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: '1.4' }}>
+                Report ragging incidents immediately. All complaints handled with strict confidentiality.
+              </div>
+            </div>
+          </div>
+          <a href="tel:18003456189" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            padding: '10px 20px',
+            background: 'rgba(200,149,46,0.15)',
+            border: '1px solid rgba(200,149,46,0.35)',
+            borderRadius: '6px',
+            color: 'var(--white)',
+            textDecoration: 'none',
+            fontSize: '18px',
+            fontWeight: '700',
+            letterSpacing: '0.04em',
+            fontFamily: 'var(--font-body)',
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
+          }}>
+            18003456189
+          </a>
+        </div>
+
+        <div className="footer-bottom" style={{ marginTop: '24px' }}>
           <p>© 2026 Mata Gujri Memorial Medical College &amp; LSK Hospital, Kishanganj. All rights reserved.</p>
           <div className="footer-motto">&ldquo;Service to Man is Service to God&rdquo;</div>
         </div>
