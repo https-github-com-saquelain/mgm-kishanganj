@@ -41,6 +41,7 @@ export default function Header() {
               <Link href="/vice-principal" onClick={closeNav}>Vice Principal</Link>
               <Link href="/medical-superintendent" onClick={closeNav}>Medical Superintendent</Link>
               <Link href="/gallery" onClick={closeNav}>Gallery</Link>
+              <Link href="/clinical-materials" onClick={closeNav}>Clinical Materials</Link>
               <a href="#">Affiliations &amp; Accreditation</a>
               <a href="https://www.matagujriuniversity.com/" target="_blank" rel="noopener noreferrer">Affiliating University Info</a>
             </div>
