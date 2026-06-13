@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { teachingFaculty, nonTeachingStaff, isHOD } from '../data/faculty'
+import { availableFacultyPdfs } from '../data/facultyPdfs'
 
 export default function FacultyPage() {
   const [tab, setTab] = useState('teaching')
@@ -190,7 +191,23 @@ export default function FacultyPage() {
               {filtered.map((d) => (
                 <article key={d.name} className="faculty-card reveal">
                   <header className="faculty-card-header">
-                    <h3>{d.name}</h3>
+                    {tab === 'teaching' && availableFacultyPdfs.has(d.name) ? (
+                      <a
+                        href={`/pdfs/faculty-pdfs/${d.name.toLowerCase().replace(/\s+/g, '-')}.pdf`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="faculty-card-pdf-link"
+                        title={`Open ${d.name} faculty list PDF`}
+                      >
+                        {d.name}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                      </a>
+                    ) : (
+                      <h3>{d.name}</h3>
+                    )}
                     <span className="faculty-card-count">{d.members.length}</span>
                   </header>
                   <ol className="faculty-list">
