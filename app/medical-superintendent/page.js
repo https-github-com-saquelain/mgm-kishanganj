@@ -53,7 +53,7 @@ export default function MedicalSuperintendentPage() {
                 <div className="principal-card-name">Prof. (Dr.) Papa Naik H</div>
                 <div className="principal-card-qual">MBBS, MS (Orthopaedics)</div>
                 <div className="principal-card-role">Medical Superintendent</div>
-                <div className="principal-card-inst">Lions Seva Kendra Hospital, Kishanganj</div>
+                <div className="principal-card-inst">M.G.M. Medical College & L.S.K. Hospital</div>
                 <div className="principal-card-contacts">
                     <a href="mailto:drpapanaik@gmail.com" className="principal-contact-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
