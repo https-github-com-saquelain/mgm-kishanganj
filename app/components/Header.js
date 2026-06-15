@@ -55,6 +55,7 @@ export default function Header() {
               <Link href="/syllabus-ug" onClick={closeNav}>Syllabus UG (Undergraduate)</Link>
               <a href="https://www.nmc.org.in/information-desk/for-colleges/pg-curricula-2/" target="_blank" rel="noopener noreferrer">Syllabus PG (Postgraduate)</a>
               <Link href="/aetcom-module" onClick={closeNav}>AETCOM Module</Link>
+              <Link href="/publications-achievements" onClick={closeNav}>Publications and Achievements</Link>
               <a href="#">Academic Calendar</a>
               <Link href="/courses" onClick={closeNav}>Courses</Link>
               <Link href="/students" onClick={closeNav}>List of Students</Link>
