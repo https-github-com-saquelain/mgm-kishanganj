@@ -1,11 +1,21 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { galleryCategories } from '../data/galleryData'
+import { fetchGallery } from '../utils/api'
 
 export default function GalleryPage() {
   const [openCategory, setOpenCategory] = useState(null)
   const [lightbox, setLightbox] = useState({ open: false, photos: [], index: 0 })
   const expandRef = useRef(null)
+
+  const [galleryCategories, setGalleryCategories] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchGallery()
+      .then(setGalleryCategories)
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false))
+  }, [])
 
   // Scroll reveal
   useEffect(() => {
@@ -79,20 +89,23 @@ export default function GalleryPage() {
       {/* ── Category Cards ── */}
       <div className="gallery-page-content">
         <div className="gallery-page-inner">
+        {loading ? (
+          <p style={{ textAlign: 'center', padding: '40px' }}>Loading gallery...</p>
+        ) : (
           <div className="gallery-cat-grid">
             {galleryCategories.map((cat, i) => (
-              <div key={cat.id} className="gallery-cat-wrapper reveal">
+              <div key={cat._id} className="gallery-cat-wrapper reveal">
 
                 {/* Category card */}
                 <button
-                  className={`gallery-cat-card ${openCategory === cat.id ? 'active' : ''}`}
-                  onClick={() => toggleCategory(cat.id)}
-                  aria-expanded={openCategory === cat.id}
+                  className={`gallery-cat-card ${openCategory === cat._id ? 'active' : ''}`}
+                  onClick={() => toggleCategory(cat._id)}
+                  aria-expanded={openCategory === cat._id}
                 >
                   {/* Cover image */}
                   <div className="gallery-cat-cover">
                     <img
-                      src={cat.cover}
+                      src={cat.coverUrl}
                       alt={cat.title}
                       onError={(e) => {
                         e.target.style.display = 'none'
@@ -128,7 +141,7 @@ export default function GalleryPage() {
                     </div>
                     <h3 className="gallery-cat-title">{cat.title}</h3>
                     <div className="gallery-cat-toggle">
-                      <span>{openCategory === cat.id ? 'Close Gallery' : 'View Photos'}</span>
+                      <span>{openCategory === cat._id ? 'Close Gallery' : 'View Photos'}</span>
                       <svg
                         viewBox="0 0 24 24"
                         fill="none"
@@ -137,7 +150,7 @@ export default function GalleryPage() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         style={{
-                          transform: openCategory === cat.id ? 'rotate(180deg)' : 'rotate(0deg)',
+                          transform: openCategory === cat._id ? 'rotate(180deg)' : 'rotate(0deg)',
                           transition: 'transform 0.3s ease'
                         }}
                       >
@@ -148,7 +161,7 @@ export default function GalleryPage() {
                 </button>
 
                 {/* Inline expanded photo grid */}
-                {openCategory === cat.id && (
+                {openCategory === cat._id && (
                   <div className="gallery-cat-expand" ref={expandRef}>
                     {cat.photos.length === 0 ? (
                       <div className="gallery-cat-empty">
@@ -173,7 +186,7 @@ export default function GalleryPage() {
                               onClick={() => openLightbox(cat.photos, pi)}
                             >
                               <img
-                                src={photo.src}
+                                src={photo.url}
                                 alt={photo.caption || cat.title}
                                 loading="lazy"
                                 onError={(e) => {
@@ -201,6 +214,7 @@ export default function GalleryPage() {
               </div>
             ))}
           </div>
+        )}
         </div>
       </div>
 
@@ -213,7 +227,7 @@ export default function GalleryPage() {
         >‹</button>
         {currentPhoto && (
           <img
-            src={currentPhoto.src}
+            src={currentPhoto.url}
             alt={currentPhoto.caption}
             onClick={(e) => e.stopPropagation()}
           />

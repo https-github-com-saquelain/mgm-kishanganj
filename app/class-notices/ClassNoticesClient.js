@@ -1,6 +1,8 @@
 'use client'
 import { useState, useMemo } from 'react'
-import { staticNotices, tagLabels, tagColors } from '../data/notices'
+import { useEffect } from 'react'
+import { tagLabels, tagColors } from '../data/notices'
+import { fetchNotices } from '../utils/api'
 
 function formatDate(iso) {
   if (!iso) return null
@@ -17,8 +19,15 @@ export default function ClassNoticesClient() {
   const [query, setQuery]   = useState('')
   const [activeTag, setTag] = useState('all')
 
-  // In future: merge with dynamic notices fetched from admin panel API
-  const allNotices = staticNotices
+  const [allNotices, setAllNotices] = useState([])
+  const [loading, setLoading] = useState(true)
+  
+  useEffect(() => {
+    fetchNotices('class-notice')
+      .then(setAllNotices)
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false))
+  }, [])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -108,7 +117,11 @@ export default function ClassNoticesClient() {
       {/* Results */}
       <section className="cn-content">
         <div className="cn-inner">
-          {grouped.length === 0 ? (
+          {loading ? (
+            <div className="cn-empty">
+              <p>Loading notices...</p>
+            </div>
+          ) : grouped.length === 0 ? (
             <div className="cn-empty">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -126,8 +139,8 @@ export default function ClassNoticesClient() {
                     const c = tagColors[n.tag] || tagColors.general
                     return (
                       <a
-                        key={n.id}
-                        href={n.href}
+                        key={n._id}
+                        href={n.fileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="cn-item"
