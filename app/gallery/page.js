@@ -26,7 +26,7 @@ export default function GalleryPage() {
     )
     els.forEach(el => observer.observe(el))
     return () => observer.disconnect()
-  }, [])
+  }, [galleryCategories])
 
   // Keyboard nav for lightbox
   useEffect(() => {
@@ -104,16 +104,21 @@ export default function GalleryPage() {
                 >
                   {/* Cover image */}
                   <div className="gallery-cat-cover">
-                    <img
-                      src={cat.coverUrl}
-                      alt={cat.title}
-                      onError={(e) => {
-                        e.target.style.display = 'none'
-                        e.target.nextSibling.style.display = 'flex'
-                      }}
-                    />
+                    {cat.coverUrl ? (
+                      <img
+                        src={cat.coverUrl}
+                        alt={cat.title}
+                        onError={(e) => {
+                          e.target.style.display = 'none'
+                          e.target.nextSibling.style.display = 'flex'
+                        }}
+                      />
+                    ) : null}
                     {/* Fallback if no cover image yet */}
-                    <div className="gallery-cat-cover-fallback" style={{ display: 'none' }}>
+                    <div
+                      className="gallery-cat-cover-fallback"
+                      style={{ display: cat.coverUrl ? 'none' : 'flex' }}
+                    >
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                         <rect x="3" y="3" width="18" height="18" rx="2" />
                         <circle cx="8.5" cy="8.5" r="1.5" />
