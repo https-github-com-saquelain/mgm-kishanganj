@@ -668,10 +668,13 @@ body {
   display: inline-block;
 }
 .notice-item {
+  display: block;
   padding: 18px 0;
   border-bottom: 1px solid rgba(0,0,0,0.06);
   transition: all 0.2s;
   cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 }
 .notice-item:hover { padding-left: 12px; }
 .notice-date {

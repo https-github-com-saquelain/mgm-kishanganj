@@ -43,24 +43,60 @@ export default function NoticesSection() {
       <div className="notices-inner">
         <div className="notices-col reveal">
           <h2>Latest Notices</h2>
-          {notices.map((notice, i) => (
-            <div key={i} className="notice-item">
-              <div className="notice-date">{notice.date}</div>
-              <div className="notice-title">{notice.title}</div>
-              {notice.tag && <span className="notice-tag tag-urgent">{notice.tag}</span>}
-            </div>
-          ))}
+          {notices.map((notice, i) => {
+            const content = (
+              <>
+                <div className="notice-date">{notice.date}</div>
+                <div className="notice-title">{notice.title}</div>
+                {notice.tag && <span className="notice-tag tag-urgent">{notice.tag}</span>}
+              </>
+            )
+
+            return notice.fileUrl ? (
+              <a
+                key={i}
+                href={notice.fileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="notice-item"
+              >
+                {content}
+              </a>
+            ) : (
+              <div key={i} className="notice-item">
+                {content}
+              </div>
+            )
+          })}
           <a href="#" className="view-all-btn">View All Notices →</a>
         </div>
         <div className="notices-col reveal" id="results">
           <h2>Examination Results</h2>
-          {results.map((result, i) => (
-            <div key={i} className="notice-item">
-              <div className="notice-date">{result.date}</div>
-              <div className="notice-title">{result.title}</div>
-              <span className="notice-tag tag-result">{result.tag}</span>
-            </div>
-          ))}
+          {results.map((result, i) => {
+            const content = (
+              <>
+                <div className="notice-date">{result.date}</div>
+                <div className="notice-title">{result.title}</div>
+                <span className="notice-tag tag-result">{result.tag}</span>
+              </>
+            )
+
+            return result.fileUrl ? (
+              <a
+                key={i}
+                href={result.fileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="notice-item"
+              >
+                {content}
+              </a>
+            ) : (
+              <div key={i} className="notice-item">
+                {content}
+              </div>
+            )
+          })}
           <a href="#" className="view-all-btn">View All Results →</a>
         </div>
       </div>
