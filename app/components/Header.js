@@ -37,6 +37,7 @@ export default function Header() {
             <a href="#about" onClick={(e) => handleNavClick(e, '#about')}>About</a>
             <div className="nav-dropdown-menu">
               <Link href="/about" onClick={closeNav}>About MGM</Link>
+              <Link href="/director" onClick={closeNav}>Hon'ble Director</Link>
               <Link href="/principal-dean" onClick={closeNav}>Principal / Dean</Link>
               <Link href="/vice-principal" onClick={closeNav}>Vice Principal</Link>
               <Link href="/medical-superintendent" onClick={closeNav}>Medical Superintendent</Link>
