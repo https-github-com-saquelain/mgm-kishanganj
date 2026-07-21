@@ -17,3 +17,9 @@ export async function fetchCourses(category) {
   if (!res.ok) throw new Error('Failed to fetch courses');
   return res.json();
 }
+
+export async function fetchStudents(level) {
+  const res = await fetch(`${API_URL}/students/index.php?level=${level}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch students');
+  return res.json();
+}
