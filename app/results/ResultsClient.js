@@ -1,7 +1,7 @@
 'use client'
 import { useState, useMemo, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { ugResults, pgResults } from '../data/results'
+import { fetchNotices } from '../utils/api'
 
 function formatDate(iso) {
   if (!iso) return null
@@ -20,9 +20,19 @@ export default function ResultsClient() {
   const [query, setQuery] = useState('')
   const [mounted, setMounted] = useState(false)
 
+  const [allResults, setAllResults] = useState([])
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     setMounted(true)
     if (searchParams.get('tab') === 'pg') setTab('pg')
+  }, [])
+
+  useEffect(() => {
+    fetchNotices('result')
+      .then(setAllResults)
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false))
   }, [])
 
   useEffect(() => {
@@ -32,6 +42,8 @@ export default function ResultsClient() {
     setQuery('')
   }, [tab, mounted])
 
+  const ugResults = useMemo(() => allResults.filter(r => r.tag === 'ug'), [allResults])
+  const pgResults = useMemo(() => allResults.filter(r => r.tag === 'pg'), [allResults])
   const source = tab === 'ug' ? ugResults : pgResults
 
   const filtered = useMemo(() => {
@@ -57,7 +69,7 @@ export default function ResultsClient() {
   return (
     <div className="results-page">
 
-      {/* Hero */}
+      {/* Hero unchanged */}
       <div className="page-hero">
         <img src="/campus-2.jpeg" alt="MGM Campus" />
         <div className="page-hero-overlay"></div>
@@ -119,7 +131,11 @@ export default function ResultsClient() {
       {/* Results list */}
       <section className="results-content">
         <div className="results-inner">
-          {grouped.length === 0 ? (
+          {loading ? (
+            <div className="cn-empty">
+              <p>Loading results...</p>
+            </div>
+          ) : grouped.length === 0 ? (
             <div className="cn-empty">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -133,41 +149,55 @@ export default function ResultsClient() {
               <div key={year} className="cn-year-group">
                 <div className="cn-year-label">{year}</div>
                 <div className="cn-list">
-                  {items.map(r => (
-                    <a
-                      key={r.id}
-                      href={r.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="cn-item"
-                    >
-                      <div className="cn-item-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                          <path d="M14 2v6h6"/><path d="M9 15h6M9 11h6"/>
-                        </svg>
+                  {items.map(r => {
+                    const content = (
+                      <>
+                        <div className="cn-item-icon">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                            <path d="M14 2v6h6"/><path d="M9 15h6M9 11h6"/>
+                          </svg>
+                        </div>
+                        <div className="cn-item-meta">
+                          <span
+                            className="cn-item-tag"
+                            style={tab === 'ug'
+                              ? { background: '#dbeafe', color: '#1e40af' }
+                              : { background: '#d1fae5', color: '#065f46' }
+                            }
+                          >
+                            {tab === 'ug' ? 'UG Result' : 'PG Result'}
+                          </span>
+                          <span className="cn-item-title">{r.title}</span>
+                        </div>
+                        <div className="cn-item-right">
+                          {r.date && <span className="cn-item-date">{formatDate(r.date)}</span>}
+                          {r.fileUrl && (
+                            <svg className="cn-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                              <path d="M15 3h6v6M10 14L21 3"/>
+                            </svg>
+                          )}
+                        </div>
+                      </>
+                    )
+
+                    return r.fileUrl ? (
+                      <a
+                        key={r._id}
+                        href={r.fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cn-item"
+                      >
+                        {content}
+                      </a>
+                    ) : (
+                      <div key={r._id} className="cn-item cn-item-disabled">
+                        {content}
                       </div>
-                      <div className="cn-item-meta">
-                        <span
-                          className="cn-item-tag"
-                          style={tab === 'ug'
-                            ? { background: '#dbeafe', color: '#1e40af' }
-                            : { background: '#d1fae5', color: '#065f46' }
-                          }
-                        >
-                          {tab === 'ug' ? 'UG Result' : 'PG Result'}
-                        </span>
-                        <span className="cn-item-title">{r.title}</span>
-                      </div>
-                      <div className="cn-item-right">
-                        {r.date && <span className="cn-item-date">{formatDate(r.date)}</span>}
-                        <svg className="cn-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-                          <path d="M15 3h6v6M10 14L21 3"/>
-                        </svg>
-                      </div>
-                    </a>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             ))

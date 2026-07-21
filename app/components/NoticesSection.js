@@ -2,25 +2,7 @@
 import { useState, useEffect } from 'react'
 import { fetchNotices } from '../utils/api'
 
-// const notices = [
-//   { date: '2025-10-29', title: 'MGMMC Anti-Ragging Committee Notice', tag: 'Important', tagClass: 'tag-urgent' },
-//   { date: '2024-03-25', title: 'Weekly Class Schedule (32nd Batch) — 25.03.2024 to 06.04.2024' },
-//   { date: '2023-04-10', title: 'Anti-Ragging Monitoring Cell Notice', tag: 'Important', tagClass: 'tag-urgent' },
-//   { date: '2022-01-17', title: 'Notice UGMAC Academic Session 2021-22' },
-//   { date: '2022-01-13', title: 'Notice PGMAC Academic Session 2021-22' },
-//   { date: '2020-11-09', title: 'Notification of MBBS Admission Session 2020-21' },
-//   { date: '2020-08-13', title: 'Beware of Fake Personnel Regarding Admission in Medical Courses', tag: 'Warning', tagClass: 'tag-urgent' },
-// ]
-
-// const results = [
-//   { date: '2026-01-02', title: 'Result of 1st Professional M.B.B.S. Examination 2025 (I)', tag: 'UG Result' },
-//   { date: '2025-12-18', title: 'Result of Postgraduate MD-MS Degree Examination 2025 (I)', tag: 'PG Result' },
-//   { date: '2025-10-29', title: 'Result of 2nd Professional M.B.B.S. Examination 2025 (I) Batch-II', tag: 'UG Result' },
-//   { date: '2025-06-17', title: 'Result of 2nd Professional M.B.B.S Examination 2025 (II)', tag: 'UG Result' },
-//   { date: '2025-06-17', title: 'Result of Postgraduate MD-MS Degree Examination 2024 (II)', tag: 'PG Result' },
-//   { date: '2025-06-16', title: 'Result of 3rd Professional MBBS Part-I Examination 2025 (II)', tag: 'UG Result' },
-//   { date: '2025-06-13', title: 'Result of 3rd Professional M.B.B.S. Part-II Examination 2025 (II)', tag: 'UG Result' },
-// ]
+const RESULT_TAG_LABELS = { ug: 'UG Result', pg: 'PG Result' }
 
 export default function NoticesSection() {
   const [notices, setNotices] = useState([])
@@ -28,15 +10,14 @@ export default function NoticesSection() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    Promise.all([fetchNotices('notice'), fetchNotices('result')])
+    Promise.all([fetchNotices('class-notice'), fetchNotices('result')])
       .then(([noticesData, resultsData]) => {
-        setNotices(noticesData)
-        setResults(resultsData)
+        setNotices(noticesData.slice(0, 5))
+        setResults(resultsData.slice(0, 5))
       })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false))
   }, [])
-
 
   return (
     <section className="notices-section" id="notices">
@@ -54,7 +35,7 @@ export default function NoticesSection() {
 
             return notice.fileUrl ? (
               <a
-                key={i}
+                key={notice._id ?? i}
                 href={notice.fileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -63,12 +44,12 @@ export default function NoticesSection() {
                 {content}
               </a>
             ) : (
-              <div key={i} className="notice-item">
+              <div key={notice._id ?? i} className="notice-item">
                 {content}
               </div>
             )
           })}
-          <a href="#" className="view-all-btn">View All Notices →</a>
+          <a href="/class-notices" className="view-all-btn">View All Notices →</a>
         </div>
         <div className="notices-col reveal" id="results">
           <h2>Examination Results</h2>
@@ -77,13 +58,15 @@ export default function NoticesSection() {
               <>
                 <div className="notice-date">{result.date}</div>
                 <div className="notice-title">{result.title}</div>
-                <span className="notice-tag tag-result">{result.tag}</span>
+                <span className="notice-tag tag-result">
+                  {RESULT_TAG_LABELS[result.tag] || result.tag}
+                </span>
               </>
             )
 
             return result.fileUrl ? (
               <a
-                key={i}
+                key={result._id ?? i}
                 href={result.fileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -92,12 +75,12 @@ export default function NoticesSection() {
                 {content}
               </a>
             ) : (
-              <div key={i} className="notice-item">
+              <div key={result._id ?? i} className="notice-item">
                 {content}
               </div>
             )
           })}
-          <a href="#" className="view-all-btn">View All Results →</a>
+          <a href="/results" className="view-all-btn">View All Results →</a>
         </div>
       </div>
     </section>
