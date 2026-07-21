@@ -1,7 +1,8 @@
 'use client'
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { teachingFaculty, nonTeachingStaff, isHOD } from '../data/faculty'
-import { availableFacultyPdfs } from '../data/facultyPdfs'
+import { fetchAllFacultyWithMembers } from '../utils/api'
+
+const isHOD = (role) => /h\.?o\.?d\.?/i.test(role || '')
 
 export default function FacultyPage() {
   const [tab, setTab] = useState('teaching')
@@ -9,6 +10,22 @@ export default function FacultyPage() {
   const [dept, setDept] = useState('all')
   const [mounted, setMounted] = useState(false)
   const stickyRef = useRef(null)
+
+  const [teachingFaculty, setTeachingFaculty] = useState([])
+  const [nonTeachingStaff, setNonTeachingStaff] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  // Single request: all departments with members already nested
+  useEffect(() => {
+    fetchAllFacultyWithMembers()
+      .then((departments) => {
+        const safe = departments.map((d) => ({ ...d, members: d.members || [] }))
+        setTeachingFaculty(safe.filter((d) => d.category === 'teaching'))
+        setNonTeachingStaff(safe.filter((d) => d.category === 'non-teaching'))
+      })
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false))
+  }, [])
 
   // Read tab from URL query param on mount, update URL on change
   useEffect(() => {
@@ -29,7 +46,7 @@ export default function FacultyPage() {
     window.history.replaceState({}, '', newUrl)
   }, [tab, mounted])
 
-  // Reset dept filter when tab switches (otherwise stale selection)
+  // Reset dept filter when tab switches
   useEffect(() => {
     setDept('all')
     setQuery('')
@@ -37,7 +54,6 @@ export default function FacultyPage() {
 
   const source = tab === 'teaching' ? teachingFaculty : nonTeachingStaff
 
-  // Filter logic
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     return source
@@ -56,14 +72,12 @@ export default function FacultyPage() {
       .filter((d) => d.members.length > 0)
   }, [source, query, dept])
 
-  // Totals for header stats
   const totals = useMemo(() => {
     const all = source.reduce((s, d) => s + d.members.length, 0)
     const shown = filtered.reduce((s, d) => s + d.members.length, 0)
     return { all, shown, deptCount: source.length }
   }, [source, filtered])
 
-  // Scroll reveal for cards
   useEffect(() => {
     const els = document.querySelectorAll('.faculty-page .reveal')
     const observer = new IntersectionObserver(
@@ -73,6 +87,27 @@ export default function FacultyPage() {
     els.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [filtered])
+
+  if (loading) {
+    return (
+      <div className="faculty-page">
+        <div className="page-hero">
+          <img src="/campus-2.jpeg" alt="MGM Campus" />
+          <div className="page-hero-overlay"></div>
+          <div className="page-hero-content">
+            <div className="section-label" style={{ color: 'var(--gold-light)' }}>Our People</div>
+            <h1>Faculty &amp; Staff Directory</h1>
+            <p>&ldquo;Service to Man is Service to God&rdquo;</p>
+          </div>
+        </div>
+        <section className="faculty-content">
+          <div className="faculty-inner">
+            <p className="text-sm text-gray-500">Loading directory...</p>
+          </div>
+        </section>
+      </div>
+    )
+  }
 
   return (
     <div className="faculty-page">
@@ -92,7 +127,6 @@ export default function FacultyPage() {
       {/* Sticky Controls Bar */}
       <div className="faculty-controls" ref={stickyRef}>
         <div className="faculty-controls-inner">
-          {/* Tabs */}
           <div className="faculty-tabs" role="tablist">
             <button
               className={`faculty-tab ${tab === 'teaching' ? 'active' : ''}`}
@@ -114,7 +148,6 @@ export default function FacultyPage() {
             </button>
           </div>
 
-          {/* Search + Dept Filter */}
           <div className="faculty-filters">
             <div className="faculty-search">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -144,7 +177,7 @@ export default function FacultyPage() {
                 All {tab === 'teaching' ? 'Departments' : 'Categories'} ({source.length})
               </option>
               {source.map((d) => (
-                <option key={d.name} value={d.name}>
+                <option key={d._id} value={d.name}>
                   {d.name} ({d.members.length})
                 </option>
               ))}
@@ -152,7 +185,6 @@ export default function FacultyPage() {
           </div>
         </div>
 
-        {/* Results summary */}
         <div className="faculty-summary">
           <div className="faculty-summary-inner">
             {query || dept !== 'all' ? (
@@ -189,11 +221,11 @@ export default function FacultyPage() {
           ) : (
             <div className="faculty-grid">
               {filtered.map((d) => (
-                <article key={d.name} className="faculty-card reveal">
+                <article key={d._id} className="faculty-card reveal">
                   <header className="faculty-card-header">
-                    {tab === 'teaching' && availableFacultyPdfs.has(d.name) ? (
+                    {tab === 'teaching' && d.fileUrl ? (
                       <a
-                        href={`/pdfs/faculty-pdfs/${d.name.toLowerCase().replace(/\s+/g, '-')}.pdf`}
+                        href={d.fileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="faculty-card-pdf-link"

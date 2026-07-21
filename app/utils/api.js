@@ -23,3 +23,24 @@ export async function fetchStudents(level) {
   if (!res.ok) throw new Error('Failed to fetch students');
   return res.json();
 }
+
+export async function fetchFacultyDepartments(category) {
+  const url = category
+    ? `${API_URL}/faculty-departments/index.php?category=${category}`
+    : `${API_URL}/faculty-departments/index.php`;
+  const res = await fetch(url, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch departments');
+  return res.json();
+}
+
+export async function fetchFacultyMembers(departmentId) {
+  const res = await fetch(`${API_URL}/faculty-members/index.php?department_id=${departmentId}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch members');
+  return res.json();
+}
+
+export async function fetchAllFacultyWithMembers() {
+  const res = await fetch(`${API_URL}/faculty-departments/index.php?include=members`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch faculty data');
+  return res.json();
+}
