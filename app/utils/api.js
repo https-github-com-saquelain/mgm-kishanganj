@@ -50,3 +50,18 @@ export async function fetchAdmissionDocuments(level) {
   if (!res.ok) throw new Error('Failed to fetch admission documents');
   return res.json();
 }
+
+export async function fetchCommitteeGroups() {
+  const res = await fetch(`${API_URL}/committee-groups/index.php`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch committee groups');
+  return res.json();
+}
+
+export async function fetchCommitteesByGroup(groupId, includeDocuments = false) {
+  const url = includeDocuments
+    ? `${API_URL}/committees/index.php?group_id=${groupId}&include=documents`
+    : `${API_URL}/committees/index.php?group_id=${groupId}`;
+  const res = await fetch(url, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch committees');
+  return res.json();
+}

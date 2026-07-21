@@ -1,8 +1,47 @@
 'use client'
-import { useEffect } from 'react'
-import { committeeGroups } from '../data/committees'
+import { useState, useEffect } from 'react'
+import { fetchCommitteeGroups, fetchCommitteesByGroup } from '../utils/api'
 
 export default function CommitteesPage() {
+  const [committeeGroups, setCommitteeGroups] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadAll() {
+      try {
+        const groups = await fetchCommitteeGroups()
+        const withCommittees = await Promise.all(
+          groups.map(async (g) => {
+            const committees = await fetchCommitteesByGroup(g._id, true)
+            return {
+              id: g.slug,
+              title: g.title,
+              description: g.description,
+              committees: committees.map((c) => ({
+                id: c.slug,
+                name: c.name,
+                shortName: c.shortName,
+                description: c.description,
+                pdfs: c.pdfs.map((p) => ({
+                  label: p.label,
+                  date: p.date,
+                  tag: p.tag,
+                  href: p.fileUrl,
+                })),
+              })),
+            }
+          })
+        )
+        setCommitteeGroups(withCommittees)
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadAll()
+  }, [])
+
   useEffect(() => {
     const els = document.querySelectorAll('.committees-page .reveal')
     const observer = new IntersectionObserver(
@@ -11,13 +50,36 @@ export default function CommitteesPage() {
     )
     els.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
-  }, [])
+  }, [committeeGroups, loading])
 
   const totalCommittees = committeeGroups.reduce((s, g) => s + g.committees.length, 0)
   const totalDocs = committeeGroups.reduce(
     (s, g) => s + g.committees.reduce((ss, c) => ss + c.pdfs.length, 0),
     0
   )
+
+  if (loading) {
+    return (
+      <div className="committees-page">
+        <div className="page-hero">
+          <img src="/campus-2.jpeg" alt="MGM Campus" />
+          <div className="page-hero-overlay"></div>
+          <div className="page-hero-content">
+            <div className="section-label" style={{ color: 'var(--gold-light)' }}>
+              Governance &amp; Policies
+            </div>
+            <h1>Committees &amp; Regulatory Bodies</h1>
+            <p>&ldquo;Service to Man is Service to God&rdquo;</p>
+          </div>
+        </div>
+        <section className="committees-content">
+          <div className="committees-inner">
+            <p className="text-sm text-gray-500">Loading committees...</p>
+          </div>
+        </section>
+      </div>
+    )
+  }
 
   return (
     <div className="committees-page">
@@ -82,41 +144,62 @@ export default function CommitteesPage() {
 
                     <div className="committee-docs">
                       <div className="committee-docs-label">
-                        {committee.pdfs.length === 1 ? 'Document' : `${committee.pdfs.length} Documents`}
+                        {committee.pdfs.length === 0
+                          ? 'No documents yet'
+                          : committee.pdfs.length === 1
+                          ? 'Document'
+                          : `${committee.pdfs.length} Documents`}
                       </div>
-                      <ul className="committee-pdf-list">
-                        {committee.pdfs.map((pdf, i) => (
-                          <li key={i}>
-                            <a
-                              href={pdf.href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="committee-pdf-link"
-                            >
-                              <span className="pdf-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-                                  <path d="M14 2v6h6" />
-                                  <path d="M9 15h6M9 11h6" />
-                                </svg>
-                              </span>
-                              <span className="pdf-meta">
-                                <span className="pdf-label">
-                                  {pdf.label}
-                                  {pdf.tag && <span className="pdf-tag">{pdf.tag}</span>}
+                      {committee.pdfs.length > 0 && (
+                        <ul className="committee-pdf-list">
+                          {committee.pdfs.map((pdf, i) => {
+                            const content = (
+                              <>
+                                <span className="pdf-icon" aria-hidden="true">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                                    <path d="M14 2v6h6" />
+                                    <path d="M9 15h6M9 11h6" />
+                                  </svg>
                                 </span>
-                                {pdf.date && <span className="pdf-date">{pdf.date}</span>}
-                              </span>
-                              <span className="pdf-action" aria-label="Open in new tab">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                  <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
-                                  <path d="M15 3h6v6M10 14L21 3" />
-                                </svg>
-                              </span>
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
+                                <span className="pdf-meta">
+                                  <span className="pdf-label">
+                                    {pdf.label}
+                                    {pdf.tag && <span className="pdf-tag">{pdf.tag}</span>}
+                                  </span>
+                                  {pdf.date && <span className="pdf-date">{pdf.date}</span>}
+                                </span>
+                                {pdf.href && (
+                                  <span className="pdf-action" aria-label="Open in new tab">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                                      <path d="M15 3h6v6M10 14L21 3" />
+                                    </svg>
+                                  </span>
+                                )}
+                              </>
+                            )
+                            return (
+                              <li key={i}>
+                                {pdf.href ? (
+                                  <a
+                                    href={pdf.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="committee-pdf-link"
+                                  >
+                                    {content}
+                                  </a>
+                                ) : (
+                                  <div className="committee-pdf-link committee-pdf-link-disabled">
+                                    {content}
+                                  </div>
+                                )}
+                              </li>
+                            )
+                          })}
+                        </ul>
+                      )}
                     </div>
                   </article>
                 ))}
@@ -137,7 +220,6 @@ export default function CommitteesPage() {
               directly or reach the Principal&apos;s office.
             </p>
 
-            {/* Toll-free number */}
             <div style={{
               display: 'inline-flex',
               alignItems: 'center',
