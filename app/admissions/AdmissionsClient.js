@@ -1,40 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
-
-const ugDocs = [
-  {
-    title: 'UG Fee Structure 2025–2026',
-    desc: 'Complete fee details for UG admissions for the session 2025–26.',
-    tag: 'Fee Structure',
-    tagColor: 'blue',
-    href: 'https://www.mgmmckishanganj.in/wp-content/uploads/2022/01/UG-Fee-Structure-2025-2026-1.pdf',
-  },
-  {
-    title: 'Public Notice — Beware of Fake Personnel',
-    desc: 'Official notice regarding fraudulent individuals claiming to facilitate admissions in medical courses.',
-    tag: 'Important Notice',
-    tagColor: 'red',
-    href: 'https://www.mgmmckishanganj.in/wp-content/uploads/2022/01/Public-Notice-Beware-of-the-Fake-Personnel-Regarding-Admission-in-Medical-Courses.pdf',
-  },
-]
-
-const pgDocs = [
-  {
-    title: 'PG Fee Structure 2025–26',
-    desc: 'Complete fee details for PG admissions for the session 2025–26.',
-    tag: 'Fee Structure',
-    tagColor: 'blue',
-    href: 'https://www.mgmmckishanganj.in/wp-content/uploads/2022/01/PG-FEE-STRUCTURE-2025-26-1.pdf',
-  },
-  {
-    title: 'PG Brochure 2024–25',
-    desc: 'Detailed brochure for postgraduate admissions including eligibility, seats, and process.',
-    tag: 'Brochure',
-    tagColor: 'green',
-    href: 'https://www.mgmmckishanganj.in/wp-content/uploads/2022/01/PG-BROCHURE-2024-25.pdf',
-  },
-]
+import { fetchAdmissionDocuments } from '../utils/api'
 
 function DocCard({ doc }) {
   const colors = {
@@ -44,13 +11,8 @@ function DocCard({ doc }) {
   }
   const c = colors[doc.tagColor] || colors.blue
 
-  return (
-    <a
-      href={doc.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="admission-doc-card"
-    >
+  const content = (
+    <>
       <div className="admission-doc-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
           <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
@@ -59,20 +21,34 @@ function DocCard({ doc }) {
         </svg>
       </div>
       <div className="admission-doc-meta">
-        <span className="admission-doc-tag" style={{ background: c.bg, color: c.text }}>
-          {doc.tag}
-        </span>
+        {doc.tag && (
+          <span className="admission-doc-tag" style={{ background: c.bg, color: c.text }}>
+            {doc.tag}
+          </span>
+        )}
         <h3 className="admission-doc-title">{doc.title}</h3>
-        <p className="admission-doc-desc">{doc.desc}</p>
+        {doc.description && <p className="admission-doc-desc">{doc.description}</p>}
       </div>
-      <div className="admission-doc-action">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-          <path d="M15 3h6v6M10 14L21 3"/>
-        </svg>
-        <span>Open PDF</span>
-      </div>
+      {doc.fileUrl && (
+        <div className="admission-doc-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+            <path d="M15 3h6v6M10 14L21 3"/>
+          </svg>
+          <span>Open PDF</span>
+        </div>
+      )}
+    </>
+  )
+
+  return doc.fileUrl ? (
+    <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer" className="admission-doc-card">
+      {content}
     </a>
+  ) : (
+    <div className="admission-doc-card admission-doc-card-disabled">
+      {content}
+    </div>
   )
 }
 
@@ -80,6 +56,20 @@ export default function AdmissionsClient() {
   const searchParams = useSearchParams()
   const [tab, setTab] = useState('ug')
   const [mounted, setMounted] = useState(false)
+
+  const [ugDocs, setUgDocs] = useState([])
+  const [pgDocs, setPgDocs] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    Promise.all([fetchAdmissionDocuments('ug'), fetchAdmissionDocuments('pg')])
+      .then(([ug, pg]) => {
+        setUgDocs(ug)
+        setPgDocs(pg)
+      })
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false))
+  }, [])
 
   useEffect(() => {
     setMounted(true)
@@ -93,6 +83,16 @@ export default function AdmissionsClient() {
   }, [tab, mounted])
 
   const docs = tab === 'ug' ? ugDocs : pgDocs
+
+  useEffect(() => {
+    const els = document.querySelectorAll('.admissions-page .reveal')
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible') }),
+      { threshold: 0.06, rootMargin: '0px 0px -30px 0px' }
+    )
+    els.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [docs, loading])
 
   return (
     <div className="admissions-page">
@@ -167,13 +167,19 @@ export default function AdmissionsClient() {
             </p>
           </div>
 
-          <div className="admission-docs-grid">
-            {docs.map((doc, i) => (
-              <div key={i} className="reveal">
-                <DocCard doc={doc} />
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <p className="text-sm text-gray-500">Loading documents...</p>
+          ) : docs.length === 0 ? (
+            <p className="text-sm text-gray-500">No documents published yet.</p>
+          ) : (
+            <div className="admission-docs-grid">
+              {docs.map((doc) => (
+                <div key={doc._id} className="reveal">
+                  <DocCard doc={doc} />
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* NEET notice */}
           <div className="admissions-notice reveal">

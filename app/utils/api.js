@@ -44,3 +44,9 @@ export async function fetchAllFacultyWithMembers() {
   if (!res.ok) throw new Error('Failed to fetch faculty data');
   return res.json();
 }
+
+export async function fetchAdmissionDocuments(level) {
+  const res = await fetch(`${API_URL}/admission-documents/index.php?level=${level}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch admission documents');
+  return res.json();
+}
