@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { degreeCourses, mbbsSeats, mbbsHref } from '../data/courses'
+import { fetchCourses } from '../utils/api'
 
 /* ── External link icon ── */
 const ExternalIcon = () => (
@@ -11,8 +11,8 @@ const ExternalIcon = () => (
 )
 
 /* ── Degree Courses tab ── */
-function DegreeCoursesTab() {
-  const totalSeats = degreeCourses.reduce((s, c) => s + c.seats, 0)
+function DegreeCoursesTab({ courses, loading }) {
+  const totalSeats = courses.reduce((s, c) => s + c.seats, 0)
 
   return (
     <div className="courses-list-panel reveal">
@@ -20,49 +20,84 @@ function DegreeCoursesTab() {
         <h2 className="courses-panel-title">Degree Courses</h2>
         <span className="courses-panel-badge">{totalSeats} Total Seats</span>
       </div>
-      <ul className="courses-subject-list">
-        {degreeCourses.map((course, i) => (
-          <li key={i}>
-            <a
-              href={course.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="courses-subject-item"
-            >
-              <span className="courses-subject-name">{course.name}</span>
-              <span className="courses-subject-right">
-                <span className="courses-subject-seats">{course.seats} Seats</span>
-                <span className="courses-subject-arrow"><ExternalIcon /></span>
-              </span>
-            </a>
-          </li>
-        ))}
-      </ul>
+      {loading ? (
+        <p className="text-sm text-gray-500">Loading...</p>
+      ) : courses.length === 0 ? (
+        <p className="text-sm text-gray-500">No courses listed yet.</p>
+      ) : (
+        <ul className="courses-subject-list">
+          {courses.map((course) => {
+            const content = (
+              <>
+                <span className="courses-subject-name">{course.name}</span>
+                <span className="courses-subject-right">
+                  <span className="courses-subject-seats">{course.seats} Seats</span>
+                  {course.fileUrl && (
+                    <span className="courses-subject-arrow"><ExternalIcon /></span>
+                  )}
+                </span>
+              </>
+            )
+
+            return course.fileUrl ? (
+              <li key={course._id}>
+                <a
+                  href={course.fileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="courses-subject-item"
+                >
+                  {content}
+                </a>
+              </li>
+            ) : (
+              <li key={course._id}>
+                <div className="courses-subject-item courses-subject-item-disabled">
+                  {content}
+                </div>
+              </li>
+            )
+          })}
+        </ul>
+      )}
     </div>
   )
 }
 
 /* ── MBBS tab ── */
-function MbbsTab() {
+function MbbsTab({ mbbs, loading }) {
   return (
     <div className="courses-list-panel reveal">
       <div className="courses-panel-header">
         <h2 className="courses-panel-title">MBBS</h2>
       </div>
-      <a
-        href={mbbsHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mbbs-link-row"
-      >
-        <div className="mbbs-seats-block">
-          <span className="mbbs-seats-number">{mbbsSeats}</span>
-          <span className="mbbs-seats-label">Seats</span>
+      {loading ? (
+        <p className="text-sm text-gray-500">Loading...</p>
+      ) : !mbbs ? (
+        <p className="text-sm text-gray-500">MBBS details not available yet.</p>
+      ) : mbbs.fileUrl ? (
+        <a
+          href={mbbs.fileUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mbbs-link-row"
+        >
+          <div className="mbbs-seats-block">
+            <span className="mbbs-seats-number">{mbbs.seats}</span>
+            <span className="mbbs-seats-label">Seats</span>
+          </div>
+          <span className="mbbs-open-label">
+            Open PDF <ExternalIcon />
+          </span>
+        </a>
+      ) : (
+        <div className="mbbs-link-row mbbs-link-row-disabled">
+          <div className="mbbs-seats-block">
+            <span className="mbbs-seats-number">{mbbs.seats}</span>
+            <span className="mbbs-seats-label">Seats</span>
+          </div>
         </div>
-        <span className="mbbs-open-label">
-          Open PDF <ExternalIcon />
-        </span>
-      </a>
+      )}
     </div>
   )
 }
@@ -70,6 +105,19 @@ function MbbsTab() {
 /* ── Main Page ── */
 export default function CoursesPage() {
   const [tab, setTab] = useState('degree')
+  const [degreeCourses, setDegreeCourses] = useState([])
+  const [mbbs, setMbbs] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    Promise.all([fetchCourses('degree'), fetchCourses('mbbs')])
+      .then(([degreeData, mbbsData]) => {
+        setDegreeCourses(degreeData)
+        setMbbs(mbbsData[0] || null) // mbbs is a single row
+      })
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false))
+  }, [])
 
   useEffect(() => {
     const els = document.querySelectorAll('.courses-page .reveal')
@@ -79,7 +127,7 @@ export default function CoursesPage() {
     )
     els.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
-  }, [tab])
+  }, [tab, loading])
 
   return (
     <div className="courses-page">
@@ -107,11 +155,11 @@ export default function CoursesPage() {
           </p>
           <div className="courses-intro-stats">
             <div>
-              <strong>150</strong>
+              <strong>{mbbs?.seats ?? 150}</strong>
               <span>MBBS Seats</span>
             </div>
             <div>
-              <strong>17</strong>
+              <strong>{degreeCourses.length || 17}</strong>
               <span>PG Specialties</span>
             </div>
             <div>
@@ -138,7 +186,7 @@ export default function CoursesPage() {
               onClick={() => setTab('mbbs')}
             >
               <span className="courses-tab-main">MBBS</span>
-              <span className="courses-tab-sub">Undergraduate &middot; 150 Seats</span>
+              <span className="courses-tab-sub">Undergraduate &middot; {mbbs?.seats ?? 150} Seats</span>
             </button>
           </div>
         </div>
@@ -147,7 +195,9 @@ export default function CoursesPage() {
       {/* Tab content */}
       <section className="courses-content">
         <div className="courses-inner">
-          {tab === 'degree' ? <DegreeCoursesTab /> : <MbbsTab />}
+          {tab === 'degree'
+            ? <DegreeCoursesTab courses={degreeCourses} loading={loading} />
+            : <MbbsTab mbbs={mbbs} loading={loading} />}
         </div>
       </section>
 

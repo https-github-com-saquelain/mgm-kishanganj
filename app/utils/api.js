@@ -11,3 +11,9 @@ export async function fetchNotices(type) {
   if (!res.ok) throw new Error('Failed to fetch notices');
   return res.json();
 }
+
+export async function fetchCourses(category) {
+  const res = await fetch(`${API_URL}/courses/index.php?category=${category}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch courses');
+  return res.json();
+}
