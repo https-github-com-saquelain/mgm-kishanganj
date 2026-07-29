@@ -1891,7 +1891,8 @@ body {
   min-width: 0;
 }
 .faculty-name {
-  font-size: 14px;
+
+  font-size: 16px;
   font-weight: 600;
   color: var(--gray-900);
   line-height: 1.35;
@@ -1944,7 +1945,7 @@ body {
   line-height: 1.1;
 }
 .faculty-role {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--gray-500);
   font-weight: 500;
   line-height: 1.4;
@@ -3214,12 +3215,12 @@ a.dept-card {
   box-shadow: 0 3px 10px rgba(10, 22, 40, 0.2);
 }
 .admissions-tab-main {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.01em;
 }
 .admissions-tab-sub {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 500;
   opacity: 0.7;
   letter-spacing: 0.04em;
