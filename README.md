@@ -40,7 +40,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 rm -rf out
 npm run build
 cd out
-rm -rf ..mgm-site-v2.zip
+rm -rf ../mgm-site-v2.zip
 zip -r ../mgm-site-v2.zip .
 cd ..
 -> upload to cpanel
